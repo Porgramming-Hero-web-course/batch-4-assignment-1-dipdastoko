@@ -6,69 +6,69 @@ Here comes the async code concept. Async means that the code will be transferred
 
 So we can handle asynchronous codes in different ways like Callback, Promise or async/await approach.
 
-Callback approach:
-function errorHandler() {
-console.log(`data not found`)
-}
+<b>Callback approach:</b> </br>
+function errorHandler() {</br>
+console.log(`data not found`)</br>
+}</br>
+</br>
+function callbackAsynchronous(erroHandle:()=>void, inputData:string|null) {</br>
+const data = inputData;</br>
+if (data) {</br>
+setTimeout(() => {</br>
+console.log(data)</br>
+}, 2000);</br>
+} else {</br>
+erroHandle();</br>
+}</br>
+}</br>
+</br></br>
+callbackAsynchronous(errorHandler, null);</br></br>
 
-function callbackAsynchronous(erroHandle:()=>void, inputData:string|null) {
-const data = inputData;
-if (data) {
-setTimeout(() => {
-console.log(data)
-}, 2000);
-} else {
-erroHandle();
-}
-}
+So here setTimeout() is an asynchronous function. We have handled the code with callback approach. Don't you think that the code is a little bit messy? It's just a small asynchronous code but handling the code looks a bit more complex.</br></br>
 
-callbackAsynchronous(errorHandler, null);
+To handle this messy situation another approach of handling the async code is using Promise. A Promise is a nicer way to handle asynchronous code. They provide a cleaner and more manageable approach to working with asynchronous operations compared to traditional callback methods.</br></br>
 
-So here setTimeout() is an asynchronous function. We have handled the code with callback approach. Don't you think that the code is a little bit messy? It's just a small asynchronous code but handling the code looks a bit more complex.
+<b>Handling async code with Promise:</b></br>
+function callbackAsynchronous(inputData: string | null):Promise<string> {</br>
+const promise = new Promise<string>((resolve, reject) => {</br>
+const data = inputData;</br>
+if (data) {</br>
+setTimeout(() => {</br>
+resolve(data);</br>
+})</br>
+} else {</br>
+reject(data);</br>
+}</br>
+});</br>
+return promise;</br>
 
-To handle this messy situation another approach of handling the async code is using Promise. A Promise is a nicer way to handle asynchronous code. They provide a cleaner and more manageable approach to working with asynchronous operations compared to traditional callback methods.
+}</br>
+</br></br>
+callbackAsynchronous(null).</br>
+then((data) => {</br>
+console.log(`Data Found ${data}`);</br>
 
-Handling async code with Promise:
-function callbackAsynchronous(inputData: string | null):Promise<string> {
-const promise = new Promise<string>((resolve, reject) => {
-const data = inputData;
-if (data) {
-setTimeout(() => {
-resolve(data);
-})
-} else {
-reject(data);
-}
-});
-return promise;
+    }).catch(() => {</br>
+    console.log('Data not found')</br>
 
-}
+})</br></br>
 
-callbackAsynchronous(null).
-then((data) => {
-console.log(`Data Found ${data}`);
+Basically what we do is we wrap the asynchronous code inside a promise and then the promise executes the asynchronous code and returns the output of the async code. Promise is a built-in class in JavaScript by which we instantiate a new promise and we wrap our async codes inside that. While instantiating the promise the constructor function of the promise takes a function as argument which is responsible for executing the async code. That executing function takes two functions as arguments generally named by resolve and reject representing the success and failure of our asynchronous code. If resolve is executed then it means our async code has been run successfully and the data is passed through the resolve() and if reject is executed then it means that our async code has been failed and the error message is passed through the reject().</br></br>
 
-    }).catch(() => {
-    console.log('Data not found')
+Promise has handler functions, catch() and then(). 'then()' is executed if the resolve() is excecuted which means our async code worked fine and the data passed by resolve() is available in then() block. 'catch()' is executed if the reject() is executed which means our async code failed and the error message passed by reject() is available in catch() block. Now in then() block we can perform any task based on the successful async code execution and handle the exceptions in catch() block if any error ouccured executing asunc code.</br></br>
 
-})
+So using then() and catch() block it becomes more easier handling asynchronous codes and write more clean codes. Also we can reuse the promise function anywhere we need it. Isn't promise better than callback approach? what do you think?</br></br>
 
-Basically what we do is we wrap the asynchronous code inside a promise and then the promise executes the asynchronous code and returns the output of the async code. Promise is a built-in class in JavaScript by which we instantiate a new promise and we wrap our async codes inside that. While instantiating the promise the constructor function of the promise takes a function as argument which is responsible for executing the async code. That executing function takes two functions as arguments generally named by resolve and reject representing the success and failure of our asynchronous code. If resolve is executed then it means our async code has been run successfully and the data is passed through the resolve() and if reject is executed then it means that our async code has been failed and the error message is passed through the reject().
+<b>async/await approach:</b></br>
+async function callbackAsynchronous(inputData: string | null){</br>
+const data = inputData;</br>
+const outputData = await inputData===null?console.log('Data not found'): setTimeout(() => { console.log(`Data found ${data}`) }, 2000);</br>
+return outputData;</br>
 
-Promise has handler functions, catch() and then(). 'then()' is executed if the resolve() is excecuted which means our async code worked fine and the data passed by resolve() is available in then() block. 'catch()' is executed if the reject() is executed which means our async code failed and the error message passed by reject() is available in catch() block. Now in then() block we can perform any task based on the successful async code execution and handle the exceptions in catch() block if any error ouccured executing asunc code.
+}</br>
+callbackAsynchronous(null);</br></br>
 
-So using then() and catch() block it becomes more easier handling asynchronous codes and write more clean codes. Also we can reuse the promise function anywhere we need it. Isn't promise better than callback approach? what do you think?
+Now comes the best way of handling asynchronous codes, handling async codes with async/await approach. Async/Await is a modern syntax in JavaScript for handling asynchronous code, built on top of promises. So, we can replace the then() and catch() block with Async/Await which will give a more like synchronous visualization.</br></br>
 
-async/await approach:
-async function callbackAsynchronous(inputData: string | null){
-const data = inputData;
-const outputData = await inputData===null?console.log('Data not found'): setTimeout(() => { console.log(`Data found ${data}`) }, 2000);
-return outputData;
-
-}
-callbackAsynchronous(null);
-
-Now comes the best way of handling asynchronous codes, handling async codes with async/await approach. Async/Await is a modern syntax in JavaScript for handling asynchronous code, built on top of promises. So, we can replace the then() and catch() block with Async/Await which will give a more like synchronous visualization.
-
-We can use Async/Await only in functions. Async keyword is always placed before the function. With the async keyword a function automatically returns a promise. Behind the scenes, all the code of the async function is passed in the initializing function that we pass in a promise constructor.
+We can use Async/Await only in functions. Async keyword is always placed before the function. With the async keyword a function automatically returns a promise. Behind the scenes, all the code of the async function is passed in the initializing function that we pass in a promise constructor.</br></br>
 We place the await keyword before any promise. So, async/await approach gives us a even more cleaner codes than Promise. It's more like regular codes and visually smoothing. As async function by default returns a promise, we can use cathc() and then() block also the async function. So, async/await is more flexible for handling the asynchronous codes.
